@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Settings | DESI TREND</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 30px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #232f3e;
+        }
+
+        h2 {
+            border-bottom: 2px solid #ff9900;
+            padding-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            background: #ff9900;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #232f3e;
+        }
+
+        #message {
+            color: green;
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>DESI TREND</h1>
+
+    <h2>Website Settings</h2>
+
+    <form id="settingsForm">
+
+        <label>Website Name</label>
+        <input type="text" id="siteName" required>
+
+        <label>Admin Email</label>
+        <input type="email" id="adminEmail">
+
+        <label>Contact Number</label>
+        <input type="tel" id="phone">
+
+        <label>Store Address</label>
+        <textarea id="address" rows="3"></textarea>
+
+        <label>Currency</label>
+        <select id="currency">
+            <option value="INR">Indian Rupee (₹)</option>
+            <option value="USD">US Dollar ($)</option>
+        </select>
+
+        <label>Delivery Charge (₹)</label>
+        <input type="number" id="delivery" min="0">
+
+        <label>Free Delivery Above (₹)</label>
+        <input type="number" id="freeDelivery" min="0">
+
+        <button type="submit">
+            Save Settings
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+    <a href="dashboard.html" class="back">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+<script>
+
+const settingsForm =
+document.getElementById("settingsForm");
+
+function loadSettings() {
+
+    const settings = JSON.parse(
+        localStorage.getItem("siteSettings")
+    ) || {};
+
+    document.getElementById("siteName").value =
+        settings.siteName || "DESI TREND";
+
+    document.getElementById("adminEmail").value =
+        settings.adminEmail || "";
+
+    document.getElementById("phone").value =
+        settings.phone || "";
+
+    document.getElementById("address").value =
+        settings.address || "";
+
+    document.getElementById("currency").value =
+        settings.currency || "INR";
+
+    document.getElementById("delivery").value =
+        settings.delivery ?? 0;
+
+    document.getElementById("freeDelivery").value =
+        settings.freeDelivery ?? 499;
+
+}
+
+settingsForm.addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const settings = {
+
+        siteName:
+        document.getElementById("siteName").value,
+
+        adminEmail:
+        document.getElementById("adminEmail").value,
+
+        phone:
+        document.getElementById("phone").value,
+
+        address:
+        document.getElementById("address").value,
+
+        currency:
+        document.getElementById("currency").value,
+
+        delivery:
+        Number(document.getElementById("delivery").value),
+
+        freeDelivery:
+        Number(document.getElementById("freeDelivery").value)
+
+    };
+
+    localStorage.setItem(
+        "siteSettings",
+        JSON.stringify(settings)
+    );
+
+    document.getElementById("message").innerText =
+        "Settings Saved Successfully!";
+
+});
+
+loadSettings();
+
+</script>
+
+</body>
+</html>
