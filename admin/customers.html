@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customers | DESI TREND</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #232f3e;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            background: white;
+            margin-top: 25px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 750px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #232f3e;
+            color: white;
+        }
+
+        .search {
+            width: 100%;
+            max-width: 350px;
+            padding: 12px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .count {
+            background: white;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>DESI TREND</h1>
+
+        <a href="dashboard.html" class="back">
+            ← Dashboard
+        </a>
+
+    </div>
+
+    <h2>Customer Management</h2>
+
+    <div class="count">
+        Total Customers: <span id="totalCustomers">0</span>
+    </div>
+
+    <input
+        type="text"
+        id="search"
+        class="search"
+        placeholder="Search Customer..."
+    >
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>SL No.</th>
+                    <th>Customer Name</th>
+                    <th>Mobile Number</th>
+                    <th>Email</th>
+                    <th>Total Orders</th>
+                </tr>
+            </thead>
+
+            <tbody id="customerList">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+let customers = [];
+
+function loadCustomers() {
+
+    const orders = JSON.parse(
+        localStorage.getItem("orders")
+    ) || [];
+
+    const customerMap = {};
+
+    orders.forEach(order => {
+
+        const name = order.customer || "Customer";
+
+        const mobile = order.phone || "";
+
+        const email = order.email || "";
+
+        const key = mobile || email || name;
+
+        if (!customerMap[key]) {
+
+            customerMap[key] = {
+                name: name,
+                phone: mobile,
+                email: email,
+                totalOrders: 0
+            };
+
+        }
+
+        customerMap[key].totalOrders++;
+
+    });
+
+    customers = Object.values(customerMap);
+
+    document.getElementById("totalCustomers")
+    .innerText = customers.length;
+
+    displayCustomers(customers);
+
+}
+
+function displayCustomers(data) {
+
+    const list =
+        document.getElementById("customerList");
+
+    list.innerHTML = "";
+
+    if (data.length === 0) {
+
+        list.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    No Customers Found
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+    data.forEach((customer, index) => {
+
+        list.innerHTML += `
+            <tr>
+
+                <td>${index + 1}</td>
+
+                <td>${customer.name}</td>
+
+                <td>${customer.phone || "Not Available"}</td>
+
+                <td>${customer.email || "Not Available"}</td>
+
+                <td>${customer.totalOrders}</td>
+
+            </tr>
+        `;
+
+    });
+
+}
+
+document.getElementById("search")
+.addEventListener("input", function() {
+
+    const value = this.value.toLowerCase();
+
+    const filtered = customers.filter(customer =>
+
+        customer.name.toLowerCase().includes(value) ||
+
+        customer.phone.includes(value) ||
+
+        customer.email.toLowerCase().includes(value)
+
+    );
+
+    displayCustomers(filtered);
+
+});
+
+loadCustomers();
+
+</script>
+
+</body>
+</html>
