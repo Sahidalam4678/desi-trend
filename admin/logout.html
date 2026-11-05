@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Logout | DESI TREND</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #232f3e;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logout-box {
+            background: white;
+            padding: 40px 25px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border-radius: 12px;
+        }
+
+        h1 {
+            color: #ff9900;
+        }
+
+        h2 {
+            color: #232f3e;
+        }
+
+        p {
+            color: #555;
+        }
+
+        button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #b02a37;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="logout-box">
+
+    <h1>DESI TREND</h1>
+
+    <h2>Admin Logout</h2>
+
+    <p>Are you sure you want to logout?</p>
+
+    <button onclick="logout()">
+        Yes, Logout
+    </button>
+
+</div>
+
+<script>
+
+function logout() {
+
+    sessionStorage.removeItem("adminLoggedIn");
+
+    alert("Successfully Logged Out!");
+
+    window.location.href = "login.html";
+
+}
+
+</script>
+
+</body>
+</html>
