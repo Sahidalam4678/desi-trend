@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login | DESI TREND</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #232f3e, #455a70);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff9900;
+        }
+
+        h2 {
+            text-align: center;
+            color: #232f3e;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin: 12px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #ff9900;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #e68a00;
+        }
+
+        #message {
+            text-align: center;
+            color: red;
+            margin-top: 15px;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #232f3e;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <h1>DESI TREND</h1>
+
+    <h2>Admin Login</h2>
+
+    <form id="loginForm">
+
+        <input
+            type="text"
+            id="username"
+            placeholder="Admin Username"
+            required
+        >
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Admin Password"
+            required
+        >
+
+        <button type="submit">
+            Login
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+    <a href="../index.html" class="back">
+        ← Back to Website
+    </a>
+
+</div>
+
+<script>
+
+document.getElementById("loginForm")
+.addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const username =
+        document.getElementById("username").value;
+
+    const password =
+        document.getElementById("password").value;
+
+    if (
+        username === "admin" &&
+        password === "admin123"
+    ) {
+
+        sessionStorage.setItem(
+            "adminLoggedIn",
+            "true"
+        );
+
+        window.location.href = "dashboard.html";
+
+    } else {
+
+        document.getElementById("message").innerText =
+            "Invalid Username or Password!";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
