@@ -79,3 +79,25 @@ body {
 .admin-links a:hover {
   background: #14532d;
 }
+.table-wrap {
+  overflow-x: auto;
+  background: white;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 400px;
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background: #e8f5e9;
+}
