@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notifications - DESI TREND</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f6f9;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.header h1 {
+    color: #222;
+    font-size: 26px;
+}
+
+button {
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.clear-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.read-btn {
+    background: #198754;
+    color: white;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.scan-btn {
+    background: #0d6efd;
+    color: white;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #00000010;
+}
+
+.stat-box h3 {
+    color: #666;
+    font-size: 14px;
+}
+
+.stat-box p {
+    font-size: 26px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #222;
+}
+
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.notification {
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    border-left: 5px solid #0d6efd;
+    box-shadow: 0 2px 8px #00000010;
+}
+
+.notification.unread {
+    background: #eef5ff;
+}
+
+.notification.low {
+    border-left-color: #ffc107;
+}
+
+.notification.message {
+    border-left-color: #198754;
+}
+
+.notification h3 {
+    margin-bottom: 8px;
+    color: #222;
+    font-size: 17px;
+}
+
+.notification p {
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.notification small {
+    color: #777;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.empty {
+    background: white;
+    padding: 40px 20px;
+    text-align: center;
+    border-radius: 10px;
+    color: #777;
+}
+
+@media(max-width: 600px) {
+    body {
+        padding: 12px;
+    }
+
+    .header h1 {
+        font-size: 22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>🔔 Notifications</h1>
+
+        <div>
+            <button class="scan-btn" onclick="scanAlerts()">
+                Check Alerts
+            </button>
+
+            <button class="clear-btn" onclick="clearAll()">
+                Clear All
+            </button>
+        </div>
+    </div>
+
+    <div class="stats">
+
+        <div class="stat-box">
+            <h3>Total Notifications</h3>
+            <p id="totalCount">0</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>Unread Notifications</h3>
+            <p id="unreadCount">0</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>Read Notifications</h3>
+            <p id="readCount">0</p>
+        </div>
+
+    </div>
+
+    <div id="notificationList" class="notification-list"></div>
+
+</div>
+
+<script>
+
+let notifications = JSON.parse(
+    localStorage.getItem("notifications") || "[]"
+);
+
+// Save notifications
+function saveNotifications() {
+    localStorage.setItem(
+        "notifications",
+        JSON.stringify(notifications)
+    );
+}
+
+// Add notification only once for each source
+function addNotification(key, type, title, message) {
+
+    const exists = notifications.some(
+        item => item.sourceKey === key
+    );
+
+    if (exists) return;
+
+    notifications.unshift({
+        id: Date.now() + Math.random(),
+        sourceKey: key,
+        type: type,
+        title: title,
+        message: message,
+        date: new Date().toLocaleString(),
+        read: false
+    });
+}
+
+// Check existing orders, products and messages
+function scanAlerts() {
+
+    const orders = JSON.parse(
+        localStorage.getItem("orders") || "[]"
+    );
+
+    const products = JSON.parse(
+        localStorage.getItem("products") || "[]"
+    );
+
+    const messages = JSON.parse(
+        localStorage.getItem("messages") || "[]"
+    );
+
+    // New Order Alerts
+    orders.forEach((order, index) => {
+
+        const orderId = order.id || index;
+
+        addNotification(
+            "order-" + orderId,
+            "order",
+            "🛒 New Order Alert",
+            "Order ID: " + orderId +
+            " | Customer: " + (order.customer || "Unknown") +
+            " | Total: " + (order.total || 0)
+        );
+
+    });
+
+    // Low Stock Alerts
+    products.forEach((product, index) => {
+
+        const stock = Number(product.stock || 0);
+        const productId = product.id || index;
+
+        if (stock <= 5) {
+
+            addNotification(
+                "stock-" + productId,
+                "low",
+                "⚠️ Low Stock Alert",
+                "Product: " + (product.name || "Unknown") +
+                " | Available Stock: " + stock
+            );
+
+        }
+
+    });
+
+    // Customer Message Alerts
+    messages.forEach((message, index) => {
+
+        const messageId = message.id || index;
+
+        addNotification(
+            "message-" + messageId,
+            "message",
+            "💬 Customer Message",
+            "From: " + (message.name || "Customer") +
+            " | " + (message.message || "New message received")
+        );
+
+    });
+
+    saveNotifications();
+    displayNotifications();
+}
+
+// Display notifications
+function displayNotifications() {
+
+    const list = document.getElementById("notificationList");
+
+    list.innerHTML = "";
+
+    let unread = notifications.filter(
+        item => !item.read
+    ).length;
+
+    let read = notifications.length - unread;
+
+    document.getElementById("totalCount").textContent =
+        notifications.length;
+
+    document.getElementById("unreadCount").textContent =
+        unread;
+
+    document.getElementById("readCount").textContent =
+        read;
+
+    if (notifications.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty">
+                <h2>🔔 No Notifications</h2>
+                <p>New alerts will appear here.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    notifications.forEach(item => {
+
+        const card = document.createElement("div");
+
+        card.className =
+            "notification " +
+            (item.read ? "" : "unread") +
+            (item.type === "low" ? " low" : "") +
+            (item.type === "message" ? " message" : "");
+
+        const title = document.createElement("h3");
+        title.textContent = item.title;
+
+        const message = document.createElement("p");
+        message.textContent = item.message;
+
+        const date = document.createElement("small");
+        date.textContent = item.date;
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        const readButton = document.createElement("button");
+        readButton.className = "read-btn";
+        readButton.textContent = item.read
+            ? "Mark as Unread"
+            : "Mark as Read";
+
+        readButton.onclick = () => toggleRead(item.id);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-btn";
+        deleteButton.textContent = "Delete";
+
+        deleteButton.onclick = () => deleteNotification(item.id);
+
+        actions.appendChild(readButton);
+        actions.appendChild(deleteButton);
+
+        card.appendChild(title);
+        card.appendChild(message);
+        card.appendChild(date);
+        card.appendChild(actions);
+
+        list.appendChild(card);
+
+    });
+
+}
+
+// Mark as read / unread
+function toggleRead(id) {
+
+    notifications = notifications.map(item => {
+
+        if (item.id === id) {
+            item.read = !item.read;
+        }
+
+        return item;
+    });
+
+    saveNotifications();
+    displayNotifications();
+}
+
+// Delete one notification
+function deleteNotification(id) {
+
+    if (!confirm("Delete this notification?")) return;
+
+    notifications = notifications.filter(
+        item => item.id !== id
+    );
+
+    saveNotifications();
+    displayNotifications();
+}
+
+// Clear all notifications
+function clearAll() {
+
+    if (!confirm("Are you sure you want to clear all notifications?")) {
+        return;
+    }
+
+    notifications = [];
+
+    saveNotifications();
+    displayNotifications();
+
+}
+
+// Initial loading
+scanAlerts();
+
+</script>
+
+</body>
+</html>
