@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Profile | DESI TREND</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 35px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            color: #232f3e;
+        }
+
+        h2 {
+            color: #232f3e;
+            border-bottom: 2px solid #ff9900;
+            padding-bottom: 12px;
+        }
+
+        .profile-icon {
+            width: 90px;
+            height: 90px;
+            background: #232f3e;
+            color: #ff9900;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            margin: 20px auto;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            background: #ff9900;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #e68a00;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #232f3e;
+        }
+
+        #message {
+            text-align: center;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>DESI TREND</h1>
+
+        <a href="dashboard.html" class="back">
+            ← Dashboard
+        </a>
+
+    </div>
+
+    <div class="profile-icon">
+        👤
+    </div>
+
+    <h2>Admin Profile</h2>
+
+    <form id="profileForm">
+
+        <label>Admin Name</label>
+
+        <input
+            type="text"
+            id="adminName"
+            placeholder="Enter Admin Name"
+            required
+        >
+
+        <label>Email Address</label>
+
+        <input
+            type="email"
+            id="adminEmail"
+            placeholder="Enter Email Address"
+            required
+        >
+
+        <label>Mobile Number</label>
+
+        <input
+            type="tel"
+            id="adminPhone"
+            placeholder="Enter Mobile Number"
+        >
+
+        <label>Store Name</label>
+
+        <input
+            type="text"
+            id="storeName"
+            placeholder="DESI TREND"
+            required
+        >
+
+        <label>Store Address</label>
+
+        <input
+            type="text"
+            id="storeAddress"
+            placeholder="Enter Store Address"
+        >
+
+        <button type="submit">
+            Save Profile
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+</div>
+
+<script>
+
+// Load Admin Profile
+
+function loadProfile() {
+
+    const profile = JSON.parse(
+        localStorage.getItem("adminProfile")
+    ) || {};
+
+    document.getElementById("adminName").value =
+        profile.name || "Admin";
+
+    document.getElementById("adminEmail").value =
+        profile.email || "";
+
+    document.getElementById("adminPhone").value =
+        profile.phone || "";
+
+    document.getElementById("storeName").value =
+        profile.storeName || "DESI TREND";
+
+    document.getElementById("storeAddress").value =
+        profile.address || "";
+
+}
+
+
+// Save Admin Profile
+
+document.getElementById("profileForm")
+.addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const profile = {
+
+        name: document.getElementById("adminName").value,
+
+        email: document.getElementById("adminEmail").value,
+
+        phone: document.getElementById("adminPhone").value,
+
+        storeName: document.getElementById("storeName").value,
+
+        address: document.getElementById("storeAddress").value
+
+    };
+
+    localStorage.setItem(
+        "adminProfile",
+        JSON.stringify(profile)
+    );
+
+    document.getElementById("message").innerText =
+        "Profile Updated Successfully!";
+
+});
+
+loadProfile();
+
+</script>
+
+</div>
+
+</body>
+</html>
