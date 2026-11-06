@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Reviews | DESI TREND</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #232f3e;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #ddd;
+        }
+
+        .card h2 {
+            color: #232f3e;
+        }
+
+        .review-card {
+            background: white;
+            padding: 20px;
+            margin-top: 18px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #ddd;
+        }
+
+        .stars {
+            color: #ff9900;
+            font-size: 20px;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .empty {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>DESI TREND</h1>
+
+        <a href="dashboard.html" class="back">
+            ← Dashboard
+        </a>
+
+    </div>
+
+    <h2>Customer Reviews Management</h2>
+
+    <p>Manage customer feedback and product ratings.</p>
+
+    <div class="summary">
+
+        <div class="card">
+            <h3>Total Reviews</h3>
+            <h2 id="totalReviews">0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Average Rating</h3>
+            <h2 id="averageRating">0 / 5</h2>
+        </div>
+
+    </div>
+
+    <h2>All Customer Reviews</h2>
+
+    <div id="reviewList"></div>
+
+</div>
+
+<script>
+
+function getReviews() {
+
+    return JSON.parse(
+        localStorage.getItem("reviews")
+    ) || [];
+
+}
+
+
+// Display Reviews
+
+function loadReviews() {
+
+    const reviews = getReviews();
+
+    const list = document.getElementById("reviewList");
+
+    list.innerHTML = "";
+
+    document.getElementById("totalReviews").innerText =
+        reviews.length;
+
+    const average = reviews.length
+        ? reviews.reduce((sum, review) =>
+            sum + Number(review.rating || 0), 0
+          ) / reviews.length
+        : 0;
+
+    document.getElementById("averageRating").innerText =
+        average.toFixed(1) + " / 5";
+
+    if (reviews.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty">
+                <h3>No Reviews Found</h3>
+                <p>Customer reviews will appear here.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    reviews.forEach((review, index) => {
+
+        const rating = Math.max(
+            0,
+            Math.min(5, Number(review.rating) || 0)
+        );
+
+        const card = document.createElement("div");
+
+        card.className = "review-card";
+
+        const title = document.createElement("h3");
+        title.textContent = review.product || "Product";
+
+        const customer = document.createElement("p");
+        customer.textContent =
+            "Customer: " + (review.name || "Customer");
+
+        const stars = document.createElement("div");
+        stars.className = "stars";
+        stars.textContent =
+            "★".repeat(Math.floor(rating)) +
+            "☆".repeat(5 - Math.floor(rating));
+
+        const comment = document.createElement("p");
+        comment.textContent =
+            review.comment || "No comment provided.";
+
+        const date = document.createElement("p");
+        date.textContent =
+            "Date: " + (review.date || "Not available");
+
+        const button = document.createElement("button");
+        button.className = "delete-btn";
+        button.textContent = "Delete Review";
+
+        button.addEventListener("click", function() {
+            deleteReview(index);
+        });
+
+        card.append(
+            title,
+            customer,
+            stars,
+            comment,
+            date,
+            button
+        );
+
+        list.appendChild(card);
+
+    });
+
+}
+
+
+// Delete Review
+
+function deleteReview(index) {
+
+    if (confirm("Are you sure you want to delete this review?")) {
+
+        let reviews = getReviews();
+
+        reviews.splice(index, 1);
+
+        localStorage.setItem(
+            "reviews",
+            JSON.stringify(reviews)
+        );
+
+        loadReviews();
+
+        alert("Review Deleted Successfully!");
+
+    }
+
+}
+
+loadReviews();
+
+</script>
+
+</body>
+</html>
