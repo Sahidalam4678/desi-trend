@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Messages | DESI TREND</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #232f3e;
+        }
+
+        .message-card {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .message-card h3 {
+            color: #232f3e;
+        }
+
+        .message-card p {
+            line-height: 1.6;
+        }
+
+        .status {
+            font-weight: bold;
+            color: #e68a00;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px 5px 5px 0;
+        }
+
+        .reply-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .reply-box {
+            display: none;
+            margin-top: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .send-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .empty {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>DESI TREND</h1>
+
+        <a href="dashboard.html" class="back">
+            ← Dashboard
+        </a>
+
+    </div>
+
+    <h2>Customer Support Messages</h2>
+
+    <p>Manage customer enquiries and messages.</p>
+
+    <div id="messageList"></div>
+
+</div>
+
+<script>
+
+function getMessages() {
+
+    return JSON.parse(
+        localStorage.getItem("messages")
+    ) || [];
+
+}
+
+
+// Load Messages
+
+function loadMessages() {
+
+    const messages = getMessages();
+
+    const list =
+        document.getElementById("messageList");
+
+    list.innerHTML = "";
+
+    if (messages.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty">
+                <h3>No Customer Messages</h3>
+                <p>Customer messages will appear here.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    messages.forEach((message, index) => {
+
+        list.innerHTML += `
+
+            <div class="message-card">
+
+                <h3>${escapeHTML(message.name || "Customer")}</h3>
+
+                <p>
+                    <strong>Email:</strong>
+                    ${escapeHTML(message.email || "Not Available")}
+                </p>
+
+                <p>
+                    <strong>Message:</strong>
+                    ${escapeHTML(message.message || "")}
+                </p>
+
+                <p class="status">
+                    Status: ${escapeHTML(message.status || "New")}
+                </p>
+
+                <button
+                    class="reply-btn"
+                    onclick="toggleReply(${index})">
+                    Reply
+                </button>
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteMessage(${index})">
+                    Delete
+                </button>
+
+                <div class="reply-box" id="replyBox${index}">
+
+                    <textarea
+                        id="reply${index}"
+                        rows="3"
+                        placeholder="Write your reply..."></textarea>
+
+                    <button
+                        class="send-btn"
+                        onclick="sendReply(${index})">
+                        Save Reply
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+// Safe HTML output
+
+function escapeHTML(value) {
+
+    return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+
+}
+
+
+// Show Reply Box
+
+function toggleReply(index) {
+
+    const box =
+        document.getElementById("replyBox" + index);
+
+    box.style.display =
+        box.style.display === "block"
+        ? "none"
+        : "block";
+
+}
+
+
+// Save Reply
+
+function sendReply(index) {
+
+    const reply =
+        document.getElementById("reply" + index).value.trim();
+
+    if (!reply) {
+
+        alert("Please write a reply!");
+
+        return;
+    }
+
+    let messages = getMessages();
+
+    messages[index].reply = reply;
+
+    messages[index].status = "Replied";
+
+    localStorage.setItem(
+        "messages",
+        JSON.stringify(messages)
+    );
+
+    alert("Reply Saved Successfully!");
+
+    loadMessages();
+
+}
+
+
+// Delete Message
+
+function deleteMessage(index) {
+
+    if (confirm("Delete this customer message?")) {
+
+        let messages = getMessages();
+
+        messages.splice(index, 1);
+
+        localStorage.setItem(
+            "messages",
+            JSON.stringify(messages)
+        );
+
+        loadMessages();
+
+    }
+
+}
+
+loadMessages();
+
+</script>
+
+</div>
+
+</body>
+</html>
