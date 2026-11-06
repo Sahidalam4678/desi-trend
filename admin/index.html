@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DESI TREND Admin Panel</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #232f3e;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            color: #ff9900;
+        }
+
+        .login-btn {
+            background: #ff9900;
+            color: black;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        .welcome {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            color: #232f3e;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(200px, 1fr)
+            );
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px #00000010;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card .icon {
+            font-size: 35px;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            color: #232f3e;
+            margin-bottom: 12px;
+        }
+
+        .card a {
+            display: inline-block;
+            background: #ff9900;
+            color: black;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #666;
+        }
+
+        @media(max-width: 600px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>DESI TREND</h1>
+
+    <a href="login.html" class="login-btn" id="loginButton">
+        Admin Login
+    </a>
+
+</header>
+
+
+<div class="container">
+
+    <div class="welcome">
+
+        <h2>Welcome to DESI TREND Admin Panel</h2>
+
+        <p>
+            Manage your products, orders, customers,
+            inventory and online shopping business.
+        </p>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+        <div class="card">
+            <div class="icon">📊</div>
+            <h3>Dashboard</h3>
+            <a href="dashboard.html">Open</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">📦</div>
+            <h3>Products</h3>
+            <a href="products.html">Manage</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">➕</div>
+            <h3>Add Product</h3>
+            <a href="add-product.html">Add New</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">🛒</div>
+            <h3>Orders</h3>
+            <a href="orders.html">Manage</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">👥</div>
+            <h3>Customers</h3>
+            <a href="customers.html">View</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">📈</div>
+            <h3>Reports</h3>
+            <a href="reports.html">View</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">🎟️</div>
+            <h3>Coupons</h3>
+            <a href="coupons.html">Manage</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">💬</div>
+            <h3>Messages</h3>
+            <a href="messages.html">View</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">⚙️</div>
+            <h3>Settings</h3>
+            <a href="settings.html">Open</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">👤</div>
+            <h3>Admin Profile</h3>
+            <a href="profile.html">Manage</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">📋</div>
+            <h3>Inventory</h3>
+            <a href="inventory.html">Manage</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">📂</div>
+            <h3>Categories</h3>
+            <a href="categories.html">Manage</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">⭐</div>
+            <h3>Reviews</h3>
+            <a href="reviews.html">View</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">🔔</div>
+            <h3>Notifications</h3>
+            <a href="notifications.html">View</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">🚪</div>
+            <h3>Logout</h3>
+            <a href="logout.html">Logout</a>
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    © 2026 DESI TREND. All Rights Reserved.
+
+</footer>
+
+
+<script>
+
+const loggedIn =
+    sessionStorage.getItem("adminLoggedIn") === "true";
+
+const loginButton =
+    document.getElementById("loginButton");
+
+if (loggedIn) {
+
+    loginButton.innerText = "Admin Logged In";
+
+    loginButton.href = "dashboard.html";
+
+}
+
+</script>
+
+</body>
+</html>
